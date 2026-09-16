@@ -38,21 +38,31 @@
     </p>
 
     <h2>2. Grundprinzip der App: Lokal-only / BYOK</h2>
-    <p>Nexara ist bewusst so gebaut, dass so wenig personenbezogene Daten wie möglich über mich als Anbieter laufen. Die App nutzt ein „Bring Your Own Key“-Prinzip (BYOK): Du richtest einen eigenen, kostenlosen Zugang zu Googles KI-Dienst (Gemini API) über dein eigenes Google-Konto ein. Deine Chat-Nachrichten werden direkt von deinem Gerät an Google gesendet – sie laufen zu keinem Zeitpunkt über eigene Server von mir, und ich habe keinerlei Einblick in deine Gespräche.</p>
+    <p>Nexara ist bewusst so gebaut, dass so wenig personenbezogene Daten wie möglich über mich als Anbieter laufen. Die App nutzt ein „Bring Your Own Key"-Prinzip (BYOK): Du richtest einen eigenen, kostenlosen Zugang zu Googles KI-Dienst (Gemini API) über dein eigenes Google-Konto ein. Deine Chat-Nachrichten werden direkt von deinem Gerät an Google gesendet – sie laufen zu keinem Zeitpunkt über eigene Server von mir, und ich habe keinerlei Einblick in deine Gespräche.</p>
 
     <h2>3. Welche Daten wo verarbeitet werden</h2>
     <p><strong>3.1 Direkt auf deinem Gerät</strong> (lokal gespeichert, verlassen dein Gerät nicht)</p>
     <ul>
       <li>Dein Gemini-API-Schlüssel</li>
       <li>Deine Chatverläufe mit den Charakteren</li>
-      <li>Gespeicherte „Erinnerungen“ (vom Sprachmodell erkannte, für die Beziehung relevante Informationen aus deinen Gesprächen)</li>
+      <li>Gespeicherte „Erinnerungen" (vom Sprachmodell erkannte, für die Beziehung relevante Informationen aus deinen Gesprächen)</li>
       <li>Dein bestätigtes Geburtsdatum (zur Alterskontrolle, siehe Punkt 5)</li>
       <li>App-Einstellungen (z. B. ausgewählter Charakter)</li>
     </ul>
-    <p>Diese Daten werden mit der Funktion „SharedPreferences“ von Android lokal auf deinem Gerät gespeichert. Sie werden nicht an mich übertragen. Deinstallierst du die App oder löschst du die App-Daten, werden sie unwiderruflich gelöscht.</p>
+    <p>Diese Daten werden mit der Funktion „SharedPreferences" von Android lokal auf deinem Gerät gespeichert. Sie werden nicht an mich übertragen. Deinstallierst du die App oder löschst du die App-Daten, werden sie unwiderruflich gelöscht.</p>
 
     <p><strong>3.2 Bei Google (Gemini API), wenn du eine Nachricht sendest</strong></p>
     <p>Jede Nachricht, die du in einem Chat abschickst, wird direkt von deinem Gerät an die Google-Server (Gemini API) übertragen, verarbeitet und die Antwort direkt an dein Gerät zurückgesendet. Rechtsgrundlage hierfür ist dein eigenes Vertragsverhältnis mit Google im Rahmen deines Google-Kontos – nicht ein Vertrag mit mir. Es gelten die Datenschutzbestimmungen von Google: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
+
+    <p><strong>Wichtig zur Transparenz:</strong> Pro abgeschickter Nachricht kontaktiert die App Gemini in der Regel nicht nur einmal, sondern bis zu dreimal, mit jeweils unterschiedlichem Zweck. Alle diese Anfragen laufen auf demselben Weg wie oben beschrieben – direkt von deinem Gerät zu Google, mit deinem eigenen API-Schlüssel, ohne Umweg über eigene Server von mir:</p>
+    <ul>
+      <li><strong>Sicherheitsprüfung deiner Nachricht:</strong> Bevor eine Antwort erzeugt wird, wird deine Nachricht zusammen mit etwas Gesprächskontext in einer separaten, kurzen Anfrage an Gemini zur Einstufung geschickt, u. a. um Krisensituationen oder problematische Inhalte zu erkennen. Davor laufen bereits einfache, rein lokale Stichwort-Filter direkt auf deinem Gerät ohne Internetverbindung – schlagen die schon an, entfällt diese und jede weitere Gemini-Anfrage für diese Nachricht vollständig.</li>
+      <li><strong>Erzeugung der eigentlichen Antwort:</strong> Die zweite Anfrage erzeugt die tatsächliche Antwort deines Charakters, basierend auf dem bisherigen Gesprächsverlauf, dem Charakterprofil und ggf. gespeicherten „Erinnerungen".</li>
+      <li><strong>Sicherheitsprüfung der Antwort und Erinnerungs-Analyse:</strong> Die vom Charakter erzeugte Antwort wird in einer dritten, gebündelten Anfrage nochmals eigenständig auf problematische Inhalte geprüft und gleichzeitig darauf untersucht, ob sich daraus eine für künftige Gespräche relevante „Erinnerung" ableiten lässt (siehe 3.1).</li>
+    </ul>
+    <p>Stuft bereits einer der rein lokalen Filter oder die erste Sicherheitsprüfung eine Nachricht als kritisch ein, unterbleiben die jeweils nachfolgenden Anfragen – die App zeigt dann stattdessen eine vorformulierte, lokal hinterlegte Ausweich- bzw. Hinweisantwort an, ohne dass dafür weiterer Kontakt zu Gemini nötig ist.</p>
+    <p>Bei proaktiven Hintergrund-Nachrichten (siehe Punkt 6) kommt eine weitere, unabhängige Gemini-Anfrage hinzu, die nach denselben Grundsätzen abläuft.</p>
+
     <p>Bei kostenloser Nutzung der Gemini API können laut Google Gesprächsinhalte zur Verbesserung von Googles eigenen Diensten verwendet werden. Wer das nicht möchte, kann dies über eine kostenpflichtige Google-Cloud-Stufe ändern (siehe Google-Dokumentation). Ich als App-Anbieter habe hierauf keinen Einfluss und erhalte selbst keinen Zugriff auf diese Daten.</p>
 
     <h2>4. Keine eigene Serverinfrastruktur</h2>
@@ -65,7 +75,8 @@
     <p>Wenn du Benachrichtigungen erlaubst, kann die App dir gelegentlich eine Nachricht von einem Charakter anzeigen, mit dem du zuvor gesprochen hast (sogenannte Proaktivität). Die dafür nötige Verarbeitung (Anfrage an die Gemini API) läuft nach denselben Grundsätzen wie unter Punkt 3.2 beschrieben, auch wenn die App im Hintergrund läuft.</p>
 
     <h2>7. Keine Weitergabe an Dritte durch mich</h2>
-    <p>Ich gebe keine Daten an Werbetreibende, Analysedienste oder sonstige Dritte weiter. Die App enthält keine Werbung und kein Tracking durch mich als Anbieter.</p>
+    <p>Ich als App-Anbieter gebe keine Daten an Werbetreibende, Analysedienste oder sonstige Dritte weiter. Die App enthält keine Werbung und kein Tracking durch mich.</p>
+    <p><strong>Wichtig zur Einordnung dieser Aussage:</strong> Sie bezieht sich auf eine Weitergabe durch mich als Anbieter – wie unter Punkt 4 beschrieben, betreibe ich keine eigenen Server, über die deine Daten laufen könnten, und es gibt daher auch nichts, was ich weitergeben könnte. Das ist etwas anderes als die unter Punkt 3.2 beschriebene direkte Übertragung deiner Nachrichten an Google (Gemini API): Diese Übertragung ist eine zwingende Kernfunktion der App, läuft direkt von deinem Gerät zu Google im Rahmen deines eigenen Google-Kontos und stellt keine „Weitergabe durch mich" dar, sondern eine von dir selbst veranlasste Nutzung eines Google-Dienstes mit deinem eigenen API-Schlüssel. Ohne diese direkte Übertragung an Google könnte die App grundsätzlich nicht funktionieren.</p>
 
     <h2>8. Deine Rechte</h2>
     <p>Da sämtliche personenbezogenen Chat- und Nutzungsdaten ausschließlich lokal auf deinem Gerät gespeichert werden, kannst du dein Recht auf Löschung selbst jederzeit ausüben, indem du die App-Daten in den Android-Einstellungen löschst oder die App deinstallierst.</p>
