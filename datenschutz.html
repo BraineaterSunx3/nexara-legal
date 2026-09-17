@@ -25,7 +25,7 @@
 
   <main>
     <h1>Datenschutzerklärung</h1>
-    <p class="meta">Stand: September 2026</p>
+    <p class="meta">Stand: 17. September 2026</p>
 
     <h2>1. Verantwortlicher</h2>
     <p>Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:</p>
@@ -38,8 +38,9 @@
       E-Mail: <a href="mailto:shneodesigns@outlook.de">shneodesigns@outlook.de</a>
     </p>
 
-    <h2>2. Grundprinzip der App: Lokal-only / BYOK</h2>
-    <p>Nexara ist bewusst so gebaut, dass so wenig personenbezogene Daten wie möglich über mich als Anbieter laufen. Die App nutzt ein „Bring Your Own Key"-Prinzip (BYOK): Du richtest einen eigenen, kostenlosen Zugang zu Googles KI-Dienst (Gemini API) über dein eigenes Google-Konto ein. Deine Chat-Nachrichten werden direkt von deinem Gerät an Google gesendet – sie laufen zu keinem Zeitpunkt über eigene Server von mir, und ich habe keinerlei Einblick in deine Gespräche.</p>
+    <h2>2. Grundprinzip der App</h2>
+    <p>Nexara ist bewusst so gebaut, dass so wenig personenbezogene Daten wie möglich über mich als Anbieter laufen. Für die eigentlichen Chat-Inhalte gilt weiterhin ein „Bring Your Own Key"-Prinzip (BYOK): Du richtest einen eigenen, kostenlosen Zugang zu Googles KI-Dienst (Gemini API) über dein eigenes Google-Konto ein. Deine Chat-Nachrichten werden direkt von deinem Gerät an Google gesendet – sie laufen zu keinem Zeitpunkt über eigene Server von mir, und ich habe keinerlei Einblick in deine Gespräche.</p>
+    <p>Für drei klar abgegrenzte Nebenfunktionen – Altersverifikation, den einmaligen Freischalt-Kauf und die Wiedererkennung deines Kontos über Geräte hinweg – betreibe ich seit September 2026 ein sehr kleines eigenes Backend (Google Firebase, siehe Punkt 3.3). Dieses Backend sieht und speichert zu keinem Zeitpunkt deine Chat-Inhalte, sondern ausschließlich die dafür nötigen Status-Informationen (siehe unten).</p>
 
     <h2>3. Welche Daten wo verarbeitet werden</h2>
     <p><strong>3.1 Direkt auf deinem Gerät</strong> (lokal gespeichert, verlassen dein Gerät nicht)</p>
@@ -47,10 +48,10 @@
       <li>Dein Gemini-API-Schlüssel</li>
       <li>Deine Chatverläufe mit den Charakteren</li>
       <li>Gespeicherte „Erinnerungen" (vom Sprachmodell erkannte, für die Beziehung relevante Informationen aus deinen Gesprächen)</li>
-      <li>Dein bestätigtes Geburtsdatum (zur Alterskontrolle, siehe Punkt 5)</li>
       <li>App-Einstellungen (z. B. ausgewählter Charakter)</li>
+      <li>Ein lokaler Zwischenspeicher deines Verifizierungs-/Testzeitraum-/Kaufstatus (reine Kopie der Werte aus Punkt 3.3, damit die App auch offline sofort etwas anzeigen kann)</li>
     </ul>
-    <p>Diese Daten werden mit der Funktion „SharedPreferences" von Android lokal auf deinem Gerät gespeichert. Sie werden nicht an mich übertragen. Deinstallierst du die App oder löschst du die App-Daten, werden sie unwiderruflich gelöscht.</p>
+    <p>Diese Daten werden mit der Funktion „SharedPreferences" von Android lokal auf deinem Gerät gespeichert. Sie werden nicht an mich übertragen. Deinstallierst du die App oder löschst du die App-Daten, werden sie unwiderruflich gelöscht. Über die Backup-Funktion in den Einstellungen kannst du Chatverläufe und Erinnerungen zusätzlich freiwillig als einzelne Datei exportieren und selbst sichern – auch dieser Export läuft ausschließlich über die von dir gewählte Speicherstelle, nicht über mich.</p>
 
     <p><strong>3.2 Bei Google (Gemini API), wenn du eine Nachricht sendest</strong></p>
     <p>Jede Nachricht, die du in einem Chat abschickst, wird direkt von deinem Gerät an die Google-Server (Gemini API) übertragen, verarbeitet und die Antwort direkt an dein Gerät zurückgesendet. Rechtsgrundlage hierfür ist dein eigenes Vertragsverhältnis mit Google im Rahmen deines Google-Kontos – nicht ein Vertrag mit mir. Es gelten die Datenschutzbestimmungen von Google: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
@@ -63,30 +64,70 @@
     </ul>
     <p>Stuft bereits einer der rein lokalen Filter oder die erste Sicherheitsprüfung eine Nachricht als kritisch ein, unterbleiben die jeweils nachfolgenden Anfragen – die App zeigt dann stattdessen eine vorformulierte, lokal hinterlegte Ausweich- bzw. Hinweisantwort an, ohne dass dafür weiterer Kontakt zu Gemini nötig ist.</p>
     <p>Bei proaktiven Hintergrund-Nachrichten (siehe Punkt 6) kommt eine weitere, unabhängige Gemini-Anfrage hinzu, die nach denselben Grundsätzen abläuft.</p>
+    <p>Bei kostenloser Nutzung der Gemini API können laut Google Gesprächsinhalte zur Verbesserung von Googles eigenen Diensten verwendet werden. Wer das nicht möchte, kann dies über eine kostenpflichtige Google-Cloud-Stufe ändern. Ich als App-Anbieter habe hierauf keinen Einfluss und erhalte selbst keinen Zugriff auf diese Daten.</p>
 
-    <p>Bei kostenloser Nutzung der Gemini API können laut Google Gesprächsinhalte zur Verbesserung von Googles eigenen Diensten verwendet werden. Wer das nicht möchte, kann dies über eine kostenpflichtige Google-Cloud-Stufe ändern (siehe Google-Dokumentation). Ich als App-Anbieter habe hierauf keinen Einfluss und erhalte selbst keinen Zugriff auf diese Daten.</p>
+    <p><strong>3.3 Firebase-Backend (Google-Anmeldung, Firestore, Cloud Functions)</strong></p>
+    <p>Um deinen Testzeitraum, deinen Kaufstatus und deine Altersverifizierung geräteunabhängig wiederzuerkennen (z. B. nach einer Neuinstallation oder auf einem zweiten Gerät), meldest du dich beim Nutzen der entsprechenden Funktionen mit demselben Google-Konto an, das du ohnehin für den Gemini-API-Schlüssel nutzt (Firebase Authentication / Google-Anmeldung). Daraus entsteht eine feste, für sich genommen nicht aussagekräftige Kontokennung („uid").</p>
+    <p>Unter dieser Kennung speichere ich in einer Firestore-Datenbank (Google Cloud, Serverstandort Europa/Frankfurt, Region „europe-west3") ausschließlich:</p>
+    <ul>
+      <li>ob dein Alter erfolgreich verifiziert wurde, und wann</li>
+      <li>den Beginn deines 14-tägigen Testzeitraums</li>
+      <li>ob du den einmaligen Freischalt-Kauf getätigt hast, wann, und den zugehörigen Kaufbeleg-Token von Google Play (siehe 3.5)</li>
+      <li>während einer laufenden Altersverifizierung vorübergehend: die Zuordnung deiner Didit-Sitzungs-ID zu deiner uid (siehe 3.4), damit ausschließlich du selbst dich über diese Sitzung freischalten kannst</li>
+    </ul>
+    <p>Diese Werte werden ausschließlich über eigene, kleine Server-Funktionen (Firebase Cloud Functions) geschrieben, nie direkt von der App aus – so kann sich niemand, auch nicht über eine veränderte App, selbst fälschlich als verifiziert oder als zahlender Nutzer eintragen. Deine Chat-Inhalte, Erinnerungen oder dein API-Schlüssel werden zu keinem Zeitpunkt an dieses Backend übertragen oder dort gespeichert. Rechtsgrundlage ist die Erfüllung des Nutzungsvertrags mit dir (Art. 6 Abs. 1 lit. b DSGVO) sowie, für die Altersverifikation, die Erfüllung meiner rechtlichen Pflicht als Anbieter einer App mit Inhalten für Erwachsene (Art. 6 Abs. 1 lit. c DSGVO i. V. m. Jugendmedienschutz-Staatsvertrag).</p>
 
-    <h2>4. Keine eigene Serverinfrastruktur</h2>
-    <p>Ich betreibe keine eigenen Server, auf denen deine Chatinhalte gespeichert oder verarbeitet werden. Es findet keine Übermittlung deiner Nachrichten an mich statt.</p>
+    <p><strong>3.4 Altersverifikation über Didit</strong></p>
+    <p>Seit September 2026 prüfe ich dein Alter nicht mehr per bloßer Selbstauskunft, sondern über den spezialisierten Verifizierungsdienstleister Didit (Didit Protocol). Du hast dabei die Wahl zwischen zwei Methoden:</p>
+    <ul>
+      <li><strong>Live-Gesichtsscan</strong> (Selfie mit Lebenderkennung): Didit verarbeitet dabei ein Selfie-Bild bzw. eine kurze Aufnahme deines Gesichts inklusive Prüfung auf ein echtes, live aufgenommenes Gesicht (Anti-Spoofing) und schätzt daraus dein Alter. Hierbei werden biometrische Daten im Sinne von Art. 9 DSGVO verarbeitet.</li>
+      <li><strong>Ausweisdokument-Foto:</strong> Didit verarbeitet ein Foto deines Ausweisdokuments (z. B. Personalausweis) und liest daraus dein tatsächliches Geburtsdatum aus, statt es zu schätzen. Auf Geräten ohne Kamera für den Live-Scan (z. B. manche Windows-Geräte) steht ausschließlich dieser Weg zur Verfügung.</li>
+    </ul>
+    <p>Diese Aufnahme läuft technisch direkt zwischen deinem Gerät und Didit; sie geht nicht über meine eigenen Server. Ich erhalte von Didit selbst niemals das Bild, das Video oder das ausgelesene Geburtsdatum, sondern über eine serverseitige Abfrage ausschließlich das Ergebnis „bestanden" oder „nicht bestanden" (siehe 3.3). Didit agiert dabei als Auftragsverarbeiter in meinem Auftrag (Art. 28 DSGVO) und daneben, für eng begrenzte eigene Zwecke wie Betrugsprävention oder eigene rechtliche Pflichten, als eigenständiger Verantwortlicher. Details findest du in Didits eigenem Verifizierungs-Datenschutzhinweis: <a href="https://didit.me/terms/verification-privacy-notice/" target="_blank" rel="noopener">didit.me/terms/verification-privacy-notice</a> sowie in Didits allgemeiner Datenschutzerklärung: <a href="https://didit.me/terms/privacy-policy/" target="_blank" rel="noopener">didit.me/terms/privacy-policy</a></p>
+    <p>Rechtsgrundlage für die Verarbeitung deiner biometrischen Daten beim Gesichtsscan ist deine ausdrückliche Einwilligung (Art. 9 Abs. 2 lit. a DSGVO), die du durch das aktive Starten des Scans nach der vorherigen Erläuterung in der App erteilst; alternativ kannst du jederzeit stattdessen den Dokumenten-Weg wählen, bei dem keine biometrischen Daten verarbeitet werden. Für die Altersverifikation insgesamt ist zusätzliche Rechtsgrundlage meine rechtliche Pflicht als Anbieter (Art. 6 Abs. 1 lit. c DSGVO i. V. m. Jugendmedienschutz-Staatsvertrag).</p>
+    <p><strong>Speicherdauer bei Didit:</strong> Ich habe die Aufbewahrungsdauer bei Didit auf 6 Monate ab der jeweiligen Sitzung begrenzt; danach werden die Sitzungsdaten inklusive einer etwaigen biometrischen Vorlage bei Didit automatisch und dauerhaft gelöscht. Eine vorzeitige Löschung kannst du jederzeit formlos bei mir per E-Mail anfragen.</p>
+
+    <p><strong>3.5 Google Play Billing (einmaliger Freischalt-Kauf)</strong></p>
+    <p>Wenn du nach Ablauf des 14-tägigen Testzeitraums die App per Einmalkauf dauerhaft freischaltest, läuft die Zahlung ausschließlich über Google Play Billing – ich erhalte zu keinem Zeitpunkt deine Zahlungsdaten (z. B. Kartennummer). Nach dem Kauf übermittelt die App den von Google ausgestellten Kaufbeleg-Token an meine Cloud Function, die diesen server-zu-server bei Google auf Gültigkeit prüft und danach deinen Freischalt-Status in Firestore speichert (siehe 3.3). Es gelten zusätzlich die Nutzungsbedingungen von Google Play: <a href="https://play.google.com/about/play-terms/" target="_blank" rel="noopener">play.google.com/about/play-terms</a> sowie die Datenschutzerklärung von Google: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
+    <p><strong>3.6 Fehler- und Inhalts-Meldungen (Google Formulare)</strong></p>
+    <p>Über „Bug melden" (Einstellungen) und die Melde-Funktion bei einzelnen KI-Antworten kannst du mir Probleme direkt aus der App melden. Diese Meldungen werden per HTTP-Anfrage an ein Google-Formular übermittelt und landen automatisch in einer Google-Tabelle, auf die ausschließlich ich Zugriff habe. Enthalten sind: dein Beschreibungstext, bei Bug-Meldungen automatisch ermittelte technische Geräte-/Plattforminformationen (Betriebssystem und Version, keine Gerätekennung), sowie optional eine von dir freiwillig angegebene Kontaktmöglichkeit für Rückfragen. Diese Daten werden bei Google Formulare/Tabellen verarbeitet (siehe <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>) und von mir manuell gelöscht, sobald die Meldung bearbeitet ist, spätestens jedoch nach 12 Monaten.</p>
+
+    <h2>4. Kein eigener Server für Chat-Inhalte</h2>
+    <p>Ich betreibe keine eigenen Server, auf denen deine Chatinhalte gespeichert oder verarbeitet werden. Die unter 3.3 bis 3.6 beschriebene, bewusst sehr kleine Backend-Infrastruktur betrifft ausschließlich Verifizierungs-, Kauf- und Meldungsstatus – niemals den Inhalt deiner Gespräche.</p>
 
     <h2>5. Altersverifikation</h2>
-    <p>Beim ersten Start der App wirst du gebeten, dein Geburtsdatum anzugeben, um sicherzustellen, dass du mindestens 18 Jahre alt bist. Diese Angabe erfolgt als reine Selbstauskunft ohne externe technische Verifikation und wird ausschließlich lokal auf deinem Gerät gespeichert.</p>
-
+    <p>Siehe Punkt 3.4 für alle Einzelheiten zur Altersverifikation über Didit.</p>
     <h2>6. Benachrichtigungen (nur Android)</h2>
-    <p>Wenn du Benachrichtigungen erlaubst, kann die App dir gelegentlich eine Nachricht von einem Charakter anzeigen, mit dem du zuvor gesprochen hast (sogenannte Proaktivität). Die dafür nötige Verarbeitung (Anfrage an die Gemini API) läuft nach denselben Grundsätzen wie unter Punkt 3.2 beschrieben, auch wenn die App im Hintergrund läuft.</p>
+    <p>Wenn du Benachrichtigungen erlaubst, kann die App dir gelegentlich eine Nachricht von einem Charakter anzeigen, mit dem du zuvor gesprochen hast. Die dafür nötige Verarbeitung läuft nach denselben Grundsätzen wie unter 3.2 beschrieben, auch wenn die App im Hintergrund läuft.</p>
 
-    <h2>7. Keine Weitergabe an Dritte durch mich</h2>
-    <p>Ich als App-Anbieter gebe keine Daten an Werbetreibende, Analysedienste oder sonstige Dritte weiter. Die App enthält keine Werbung und kein Tracking durch mich.</p>
-    <p><strong>Wichtig zur Einordnung dieser Aussage:</strong> Sie bezieht sich auf eine Weitergabe durch mich als Anbieter – wie unter Punkt 4 beschrieben, betreibe ich keine eigenen Server, über die deine Daten laufen könnten, und es gibt daher auch nichts, was ich weitergeben könnte. Das ist etwas anderes als die unter Punkt 3.2 beschriebene direkte Übertragung deiner Nachrichten an Google (Gemini API): Diese Übertragung ist eine zwingende Kernfunktion der App, läuft direkt von deinem Gerät zu Google im Rahmen deines eigenen Google-Kontos und stellt keine „Weitergabe durch mich" dar, sondern eine von dir selbst veranlasste Nutzung eines Google-Dienstes mit deinem eigenen API-Schlüssel. Ohne diese direkte Übertragung an Google könnte die App grundsätzlich nicht funktionieren.</p>
+    <h2>7. Auftragsverarbeiter und weitere Empfänger im Überblick</h2>
+    <p>Zur besseren Übersicht fasse ich hier zusammen, welche externen Dienstleister im Rahmen der App personenbezogene Daten verarbeiten:</p>
+    <ul>
+      <li><strong>Google Ireland Limited / Google LLC:</strong> Gemini API (Chat-Inhalte, direkt über dein eigenes Google-Konto, siehe 3.2), Firebase Authentication/Firestore/Cloud Functions (Konto- und Statusdaten, siehe 3.3), Google Play Billing (Kaufabwicklung, siehe 3.5), Google Formulare/Tabellen (Meldungen, siehe 3.6)</li>
+      <li><strong>Didit Protocol:</strong> Altersverifikation, als Auftragsverarbeiter in meinem Auftrag (biometrische bzw. Dokumentendaten, siehe 3.4)</li>
+    </ul>
+    <p>Mit Google und Didit bestehen, soweit datenschutzrechtlich erforderlich, entsprechende Auftragsverarbeitungsvereinbarungen bzw. Standardvertragsklauseln.</p>
+    <h2>8. Keine Weitergabe an Dritte durch mich</h2>
+    <p>Ich als App-Anbieter gebe keine Daten an Werbetreibende, Analysedienste oder sonstige Dritte weiter, die nicht unter Punkt 7 aufgeführt sind. Die App enthält keine Werbung und kein Tracking durch mich.</p>
+    <p>Wichtig zur Einordnung dieser Aussage: Die unter Punkt 7 genannten Dienstleister stellen keine „Weitergabe an Dritte" in diesem Sinne dar, sondern sind entweder von mir beauftragte Auftragsverarbeiter oder – bei der Gemini API und Google Play Billing – von dir selbst im Rahmen deines eigenen Google-Kontos veranlasste Dienste. Ohne diese Dienste könnte die App ihre Kernfunktionen (Chat, Altersverifikation, Freischaltung) nicht erbringen.</p>
 
-    <h2>8. Deine Rechte</h2>
-    <p>Da sämtliche personenbezogenen Chat- und Nutzungsdaten ausschließlich lokal auf deinem Gerät gespeichert werden, kannst du dein Recht auf Löschung selbst jederzeit ausüben, indem du die App-Daten in den Android-Einstellungen löschst oder die App deinstallierst.</p>
-    <p>Für Daten, die im Rahmen deiner Nutzung der Gemini API bei Google anfallen, wende dich bitte direkt an Google bzw. nutze die von Google bereitgestellten Auskunfts- und Löschmöglichkeiten in deinem Google-Konto.</p>
-    <p>Bezüglich der wenigen Daten, die ich selbst erhalten könnte (z. B. wenn du mich per E-Mail kontaktierst), hast du die üblichen Rechte nach DSGVO: Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Wende dich hierfür an die oben genannte E-Mail-Adresse.</p>
-    <p>Du hast zudem das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.</p>
+    <h2>9. Deine Rechte</h2>
+    <p>Für Chat-Inhalte, Erinnerungen und den API-Schlüssel, die ausschließlich lokal auf deinem Gerät gespeichert werden, kannst du dein Recht auf Löschung jederzeit selbst ausüben, indem du die App-Daten in den Android-Einstellungen löschst oder die App deinstallierst.</p>
+    <p><strong>Wichtig:</strong> Das gilt NICHT automatisch für die unter 3.3 genannten Status-Daten in meinem Firebase-Backend (Verifizierungs-, Trial- und Kaufstatus). Diese sind an dein Google-Konto gebunden und bleiben auch nach einer Deinstallation bestehen, damit dein Testzeitraum bzw. Kaufstatus bei einer Neuinstallation erhalten bleibt. Möchtest du diese Daten vollständig gelöscht haben, wende dich bitte per E-Mail an mich (siehe Punkt 1); ich lösche sie dann händisch, soweit keine gesetzliche Aufbewahrungspflicht entgegensteht.</p>
+    <p>Für Daten, die im Rahmen deiner Nutzung der Gemini API, von Google Play Billing oder deines Google-Kontos allgemein bei Google anfallen, wende dich bitte direkt an Google. Für Daten, die bei der Altersverifikation bei Didit anfallen, kannst du dich wahlweise an mich oder direkt an Didit wenden (siehe 3.4).</p>
+    <p>Bezüglich aller genannten Daten hast du die üblichen Rechte nach DSGVO: Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Wende dich hierfür an die oben genannte E-Mail-Adresse. Du hast zudem das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.</p>
+    <h2>10. Speicherdauer im Überblick</h2>
+    <ul>
+      <li>Chat-Inhalte, Erinnerungen, API-Schlüssel, Einstellungen: ausschließlich lokal auf deinem Gerät, bis zur Löschung/Deinstallation durch dich.</li>
+      <li>Verifizierungs-/Trial-/Kaufstatus in Firestore: solange du die App nutzt, bzw. bis zu einer Löschanfrage von dir.</li>
+      <li>Verifizierungsdaten bei Didit, inklusive einer etwaigen biometrischen Vorlage: 6 Monate ab der jeweiligen Sitzung, danach automatische Löschung bei Didit.</li>
+      <li>Kaufbeleg-Token bei Google Play: gemäß den eigenen Aufbewahrungsfristen von Google.</li>
+      <li>Bug-/Inhalts-Meldungen in der Google-Tabelle: bis zur Bearbeitung, spätestens 12 Monate.</li>
+    </ul>
 
-    <h2>9. Änderungen dieser Datenschutzerklärung</h2>
-    <p>Ich behalte mir vor, diese Datenschutzerklärung anzupassen, sofern sich die App oder rechtliche Anforderungen ändern. Die jeweils aktuelle Fassung ist innerhalb der App sowie unter dem in der App angegebenen Link abrufbar.</p>
+    <h2>11. Änderungen dieser Datenschutzerklärung</h2>
+    <p>Ich behalte mir vor, diese Datenschutzerklärung anzupassen, sofern sich die App oder rechtliche Anforderungen ändern.</p>
+
   </main>
 
   <footer class="site">
